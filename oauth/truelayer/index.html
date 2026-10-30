@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Returning to Budget Buddy…</title>
+<style>body{font-family:system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0F172A;color:#ECEDEE}main{text-align:center;padding:32px;max-width:360px}a{display:inline-block;margin-top:16px;padding:12px 20px;border-radius:10px;background:#2563EB;color:#fff;text-decoration:none;font-weight:600}#fallback{display:none}</style>
+</head>
+<body>
+<main>
+<p id="msg">Returning to Budget Buddy…</p>
+<div id="fallback"><p>If the app did not open, tap below.</p><a id="link" href="#">Open Budget Buddy</a></div>
+</main>
+<script>
+(function () {
+  // Static OAuth redirect helper for truelayer. Forwards the bank's response to the
+  // app's URL scheme. No secrets, no storage, no network requests.
+  var allowed = ["code", "state", "error", "error_description", "scope"];
+  var src = new URLSearchParams(location.search);
+  var dst = new URLSearchParams();
+  allowed.forEach(function (k) { if (src.has(k)) dst.set(k, src.get(k)); });
+  var target = "moneytracker://oauth/truelayer" + (dst.toString() ? "?" + dst.toString() : "");
+  document.getElementById("link").setAttribute("href", target);
+  if (!src.has("code") && !src.has("error")) {
+    document.getElementById("msg").textContent = "Nothing to do here. Start the connection from the Budget Buddy app.";
+    return;
+  }
+  setTimeout(function () { document.getElementById("fallback").style.display = "block"; }, 1500);
+  location.replace(target);
+})();
+</script>
+</body>
+</html>
